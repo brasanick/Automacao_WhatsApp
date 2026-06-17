@@ -19,16 +19,29 @@ ZAPI_URL = (
     f"/token/{ZAPI_TOKEN}/send-text"
 )
 
+#versão alterada do fetch_contacts para mostrar o debug da resposta bruta, data e count
 
 def fetch_contacts(supabase: Client, limit: int = 3) -> list[dict]:
-    """Busca até `limit` contatos na tabela 'contacts' do Supabase."""
     response = (
         supabase.table("contacts")
-        .select("name, phone")
+        .select("*")
         .limit(limit)
         .execute()
     )
+    print("DEBUG — resposta bruta:", response)
+    print("DEBUG — data:", response.data)
+    print("DEBUG — count:", response.count)
     return response.data
+
+# def fetch_contacts(supabase: Client, limit: int = 3) -> list[dict]:
+#    """Busca até `limit` contatos na tabela 'contacts' do Supabase."""
+#    response = (
+#        supabase.table("contacts")
+#        .select("name, phone")
+#        .limit(limit)
+#        .execute()
+#    )
+#    return response.data
 
 
 def send_whatsapp(phone: str, name: str) -> dict:
